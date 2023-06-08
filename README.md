@@ -10,6 +10,6 @@ Made for VEX V5
 3. In the Terminal, type the following commands: 
 `cd ~/Documents/vex-vscode-projects/(your project name)`
 `git init`
-`git remote add origin https://github.com/ericssonl07/gittest`
-`git checkout main`
+`git remote add origin https://github.com/ericssonl07/VEX_Drivetrain`
+`git checkout main (If this doesn't work you can ignore)`
 `git pull origin main`
