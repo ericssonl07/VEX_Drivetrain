@@ -2,6 +2,13 @@
 #include <math.h>
 #include <vex.h>
 
+bool drivetrain::toggle(vex::controller::button button, bool & pastState, bool & toggleState) {
+    if (button.pressing() != pastState and pastState == false) {
+        toggleState = not toggleState;
+    }
+    return toggleState;
+}
+
 drivetrain::drivetrain(vex::motor * leftMotor1, vex::motor * leftMotor2, vex::motor * rightMotor1, vex::motor * rightMotor2, vex::gps * gps) {
     this -> leftMotor1  = leftMotor1;
     this -> leftMotor2  = leftMotor2;
@@ -82,7 +89,9 @@ void drivetrain::turn_heading(double heading) {
 void drivetrain::control() {
     vex::controller Controller(vex::controllerType::primary);
     bool pastPrecisionState = false;
+    bool precisionToggle = false;
     while (true) {
+        toggle(Controller.ButtonY, pastPrecisionState, precisionToggle);
         controllerAxis1 = Controller.Axis1.position();
         controllerAxis2 = Controller.Axis2.position();
         controllerAxis3 = Controller.Axis3.position();
@@ -92,6 +101,13 @@ void drivetrain::control() {
         leftMotor2Speed  = controllerAxis3 - controllerAxis4 + controllerAxis1;
         rightMotor1Speed = controllerAxis3 - controllerAxis4 - controllerAxis1;
         rightMotor2Speed = controllerAxis3 + controllerAxis4 - controllerAxis1;
+
+        if (precisionToggle) {
+            leftMotor1Speed /= 5.0;
+            leftMotor2Speed /= 5.0;
+            rightMotor1Speed /= 5.0;
+            rightMotor2Speed /= 5.0;
+        }
 
         leftMotor1 -> spin(vex::directionType::fwd, leftMotor1Speed, vex::percentUnits::pct);
         leftMotor2 -> spin(vex::directionType::fwd, leftMotor2Speed, vex::percentUnits::pct);

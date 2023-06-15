@@ -61,6 +61,8 @@ class drivetrain {
         double controllerAxis3;
         double controllerAxis4;
 
+        bool toggle(vex::controller::button button, bool & pastState, bool & toggleState);
+
     public:
 
         drivetrain(vex::motor * lm1, vex::motor * lm2, vex::motor * rm1, vex::motor * rm2, vex::gps * gps);
